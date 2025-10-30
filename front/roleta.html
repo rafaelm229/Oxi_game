@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roleta de Prêmios Oxxi</title>
+<style>
+  body {
+    background-color: #070906;
+    color: #C5C6C5;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 1rem;
+    text-align: center;
+  }
+  h1 { color: #A7FB00; margin-bottom: 1rem; }
+  #canvas-container { position: relative; margin-bottom: 1rem; }
+  #btn-spin, #btn-extra { 
+    background-color: #A7FB00; color: #070906; border: none; border-radius: 8px;
+    padding: 12px 24px; font-size: 1rem; cursor: pointer; margin-top: 15px;
+  }
+  #btn-spin:hover, #btn-extra:hover { background-color: #C5FF4D; }
+  #message { margin-top: 1rem; font-size: 1.2rem; color: #FFFFFF; }
+</style>
+</head>
+<body>
+
+<h1>Parabéns por Participar! 🎉</h1>
+<div id="canvas-container">
+  <canvas id="wheel" width="600" height="600"></canvas>
+</div>
+<button id="btn-spin">Girar a Roleta 🎁</button>
+<button id="btn-extra" style="display:none;">Rodada Extra - Marque a gente no Instagram!</button>
+<div id="message"></div>
+
+<script src="https://cdn.jsdelivr.net/gh/zarocknz/javascript-winwheel/Winwheel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script>
+// ----------------------------
+// VARIÁVEIS DE CONFIGURAÇÃO
+// ----------------------------
+let playerScore = 5; // Pontos do jogador do jogo da memória
+const roletaColors = ['#A7FB00', '#ffff']; // Cores alternadas da roleta
+
+// Prêmios com pesos baseados na pontuação
+const basePrizes = [
+  { name: 'Meia Oxi', weight: 1 },
+  { name: 'Caneca', weight: 1 },
+  { name: 'Copo', weight: 1 },
+  { name: 'Caneta', weight: 1 },
+  { name: 'Caderno', weight: 1 },
+  { name: 'Camiseta Oxxi', weight: 2 },
+  { name: 'Desconto Especial', weight: 2 },
+  { name: 'Mentoria Gratuita', weight: 2 },
+  { name: 'Garrafa Térmica', weight: 3 },
+  { name: 'Presente Surpresa', weight: 3 }
+];
+
+// ----------------------------
+// FUNÇÕES
+// ----------------------------
+
+// Ajusta os pesos baseado na pontuação
+function calculateWeightedPrizes(score){
+  return basePrizes.map(p => ({ ...p, weight: p.weight + score }));
+}
+
+// Cria a roleta
+function createWheel(prizes, colors){
+  return new Winwheel({
+    'canvasId': 'wheel',
+    'numSegments': prizes.length,
+    'outerRadius': 300,
+    'textFontSize': 14,
+    'segments': prizes.map((p,i)=>({ 'fillStyle': colors[i%colors.length], 'text': p.name })),
+    'animation': {
+      'type':'spinToStop',
+      'duration':5,
+      'spins':8,
+      'callbackFinished': alertPrize
+    }
+  });
+}
+
+// Seleção aleatória ponderada pelo peso
+function weightedRandom(prizes){
+  let weighted = [];
+  prizes.forEach(p=>{
+    for(let i=0;i<p.weight;i++) weighted.push(p.name);
+  });
+  return weighted[Math.floor(Math.random()*weighted.length)];
+}
+
+// ----------------------------
+// INICIALIZAÇÃO
+// ----------------------------
+let wheelSegments = calculateWeightedPrizes(playerScore);
+let theWheel = createWheel(wheelSegments, roletaColors);
+
+// Botão girar roleta
+document.getElementById('btn-spin').addEventListener('click', ()=>{
+  document.getElementById('btn-spin').disabled = true;
+
+  const prizeName = weightedRandom(wheelSegments);
+  const prizeIndex = wheelSegments.findIndex(p=>p.name===prizeName)+1;
+  const stopAngle = (360/wheelSegments.length)*(prizeIndex-1) + Math.random()*(360/wheelSegments.length);
+  theWheel.animation.stopAngle = stopAngle;
+
+  theWheel.startAnimation();
+});
+
+// Callback quando a roleta para
+function alertPrize(indicatedSegment){
+  document.getElementById('message').textContent = `🎉 Você ganhou: ${indicatedSegment.text}!`;
+  document.getElementById('btn-extra').style.display = 'inline-block';
+}
+
+// Rodada extra via Instagram
+document.getElementById('btn-extra').addEventListener('click', ()=>{
+  document.getElementById('message').textContent = '✨ Ótimo! Compartilhe nos stories e marque a gente no Instagram para uma rodada extra!';
+});
+</script>
+</body>
+</html>

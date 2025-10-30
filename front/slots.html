@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Slots | Oxxi Games</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="slots">
+  <div class="container">
+    <h1>Caça-Níquel Oxxi</h1>
+    <div class="slots-area">
+      <div class="slot">❓</div>
+      <div class="slot">❓</div>
+      <div class="slot">❓</div>
+      <div class="slot">❓</div>
+      <div class="slot">❓</div>
+      <div class="slot">❓</div>
+      <div class="slot">❓</div>
+      <div class="slot">❓</div>
+      <div class="slot">❓</div>
+    </div>
+    <button id="girar">Girar</button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const girarBtn = document.getElementById('girar');
+      const slots = document.querySelectorAll('.slot');
+      const icons = ["🍒", "🍋", "🍇", "⭐", "💎", "🍊", "🔔", " BAR", " 7️⃣"];
+
+      const spin = () => {
+        // Desabilita o botão para evitar múltiplos cliques
+        girarBtn.disabled = true;
+
+        // Inicia a animação de rolagem para cada slot
+        let spinningIntervals = [];
+        slots.forEach(slot => {
+          slot.classList.remove('landed'); // Remove a classe da animação de "pouso" anterior
+          const intervalId = setInterval(() => {
+            const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+            slot.textContent = randomIcon;
+          }, 100); // Muda o ícone a cada 100ms
+          spinningIntervals.push(intervalId);
+        });
+
+        // Para cada slot com um atraso escalonado
+        slots.forEach((slot, index) => {
+          setTimeout(() => {
+            // Para a animação de rolagem
+            clearInterval(spinningIntervals[index]);
+            
+            // Define o ícone final
+            const finalIcon = icons[Math.floor(Math.random() * icons.length)];
+            slot.textContent = finalIcon;
+            
+            // Adiciona a animação de "pouso"
+            slot.classList.add('landed');
+
+          }, 1000 + index * 200); // Atraso base de 1s + 200ms por slot
+        });
+
+        // Reabilita o botão após a última animação terminar
+        const totalAnimationTime = 1000 + (slots.length - 1) * 200;
+        setTimeout(() => {
+          girarBtn.disabled = false;
+        }, totalAnimationTime + 300); // Adiciona um pequeno buffer
+      };
+
+      girarBtn.addEventListener('click', spin);
+    });
+  </script>
+</body>
+</html>

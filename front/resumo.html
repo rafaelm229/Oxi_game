@@ -1,0 +1,39 @@
+<!-- resumo.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Resumo do Jogo | Oxxi Games</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="resumo">
+  <div class="container">
+    <h1>Você Mandou Bem!</h1>
+    <p>Sua pontuação: <span id="pontos">0</span></p>
+    <div id="ranking">
+      <h2>Ranking Atual</h2>
+      <ol id="lista-ranking"></ol>
+    </div>
+    <p>Prepare-se! Você será levado à roleta para tentar seu prêmio 🎁</p>
+    <button onclick="window.location.href='roleta.html'">Ir para a Roleta</button>
+  </div>
+
+  <script>
+    // Exemplo de carregamento de pontuação do localStorage
+    const pontos = localStorage.getItem('pontuacao') || 0;
+    document.getElementById('pontos').textContent = pontos;
+
+    // Mock de ranking (posteriormente integrado ao backend)
+    const ranking = [
+      { nome: "Ana", pontos: 120 },
+      { nome: "Carlos", pontos: 90 },
+      { nome: "Você", pontos: pontos }
+    ];
+    ranking.forEach(r => {
+      const li = document.createElement('li');
+      li.textContent = `${r.nome} — ${r.pontos} pts`;
+      document.getElementById('lista-ranking').appendChild(li);
+    });
+  </script>
+</body>
+</html>

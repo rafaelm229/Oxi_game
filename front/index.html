@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hora de Jogar</title>
+    <style>
+        :root {
+            --verde-oxxi: #A7FB00;
+            --fundo-dark: #070906;
+            --container: #131412;
+            --texto-branco: #FFFFFF;
+            --texto-cinza: #C5C6C5;
+            --fundo-form: #5c1f1f;
+            --campo-input: #e1b86a;
+            --texto-form: #f5f2e8;
+            --botao-principal: #d93b3b;
+            --destak-do-botao: #ffc700;
+
+
+
+        }
+
+        body {
+            background-color: var(--fundo-dark);
+            color: var(--texto-branco);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-image: url('../bg_form3.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        form {
+            background-color: var(--fundo-form);
+            padding: 1.5rem;
+        }
+
+        .container {
+            background-color:  var(--fundo-form);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 0 20px rgba(167, 251, 0, 0.25);
+            max-width: 300px;
+            width: 100%;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            color: var(--verde-f5f2e8);
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p.subtitulo {
+            color: var(--texto-f5f2e8);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            color: var(--texto-cinza);
+            display: block;
+            text-align: left;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            border-radius: 8px;
+            border: 1px solid var(--campo-input);
+            background-color: #0B0C0B;
+            color: var(--texto-branco);
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: all 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color:var(--campo-input);
+            box-shadow: 0 0 5px rgba(167, 251, 0, 0.4);
+        }
+
+        button {
+            background-color: var(--botao-principal);
+            color: var(--texto-form);
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: var(--destak-do-botao);
+            transform: scale(1.03);
+        }
+
+        .msg {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--texto-cinza);
+            min-height: 1.2rem;
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+
+            input,
+            button {
+                font-size: 0.95rem;
+                padding: 12px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 2.5rem 3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Cadastre-se para Jogar</h1>
+        <p class="subtitulo">Preencha seus dados para participar do desafio da memória!</p>
+
+        <form id="leadForm">
+            <label for="nome">Nome Completo</label>
+            <input type="text" id="nome" name="nome" required>
+
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="telefone">Telefone</label>
+            <input type="tel" id="telefone" name="telefone" placeholder="(DDD) 99999-9999" required>
+
+            <button type="submit">Participar</button>
+        </form>
+
+        <p class="msg" id="msg"></p>
+    </div>
+
+    <script>
+        const form = document.getElementById('leadForm');
+        const msg = document.getElementById('msg');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            msg.textContent = "Enviando...";
+
+            const data = {
+                name: form.nome.value,
+                email: form.email.value,
+                personal_phone: form.telefone.value,
+                score: 0,
+                moves: 0,
+                time: 0
+            };
+
+            try {
+                const response = await fetch("http://localhost:10000/api/lead", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                console.log("Resposta:", result);
+                msg.textContent = result.message || "Cadastro enviado com sucesso!";
+
+                setTimeout(() => {
+                    window.location.href = "escolha-jogo.html";
+                }, 500); // espera 0,5s antes de redirecionar
+
+
+            } catch (err) {
+                console.error("Erro ao enviar:", err);
+                msg.textContent = "Ocorreu um erro ao enviar. Tente novamente.";
+            }
+        });
+    </script>
+</body>
+
+</html>

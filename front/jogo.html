@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jogo da Memória Oxxi</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #070906;
+      color: #c5c6c5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 1rem;
+    }
+
+    h1 {
+      color: #a7fb00;
+      text-align: center;
+    }
+
+    .game-container {
+      background-color: #131412;
+      padding: 20px;
+      border-radius: 20px;
+      display: grid;
+      grid-template-columns: repeat(4, 160px);
+      grid-gap: 10px;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(167, 251, 0, 0.3);
+    }
+
+    .card {
+      width: 150px;
+      height: 150px;
+      background-color: #070906;
+      border: 2px solid #a7fb00;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      color: #070906;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+
+    .card.flipped, .card.matched {
+      background-color: #a7fb00;
+      color: #070906;
+      transform: scale(1.05);
+    }
+
+    #scoreboard {
+      margin-top: 15px;
+      color: #FFFFFF;
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    #btn-roleta {
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      background-color: #a7fb00;
+      color: #070906;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: none;
+    }
+
+    @media (max-width: 500px) {
+      .game-container {
+        grid-template-columns: repeat(3, 70px);
+      }
+      .card {
+        width: 70px;
+        height: 70px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Jogo da Memória Oxxi 🎯</h1>
+  <div id="scoreboard">
+    Tempo Restante: <span id="countdown">45</span>s | Tentativas: <span id="moves">0</span>
+  </div>
+  <div class="game-container" id="game"></div>
+  <button id="btn-roleta">Girar a Roleta 🎁</button>
+
+  <script>
+    const cardsData = ['📧','📊','💡','💻','📱','🚀','📈','🎯'];
+    let cards = [...cardsData, ...cardsData];
+    let flipped = [];
+    let matched = 0;
+    let moves = 0;
+    let countdown = 45;
+    let countdownInterval;
+    const gameContainer = document.getElementById('game');
+    const movesDisplay = document.getElementById('moves');
+    const countdownDisplay = document.getElementById('countdown');
+    const btnRoleta = document.getElementById('btn-roleta');
+
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    function createCards() {
+      shuffle(cards).forEach(icon => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.dataset.icon = icon;
+        card.addEventListener('click', flipCard);
+        gameContainer.appendChild(card);
+      });
+      startCountdown();
+    }
+
+    function flipCard() {
+      if (flipped.length === 2 || this.classList.contains('flipped') || this.classList.contains('matched')) return;
+      this.classList.add('flipped');
+      this.textContent = this.dataset.icon;
+      flipped.push(this);
+      if (flipped.length === 2) {
+        moves++;
+        movesDisplay.textContent = moves;
+        checkMatch();
+      }
+    }
+
+    function checkMatch() {
+      const [card1, card2] = flipped;
+      if (card1.dataset.icon === card2.dataset.icon) {
+        card1.classList.add('matched');
+        card2.classList.add('matched');
+        matched += 2;
+        flipped = [];
+        if (matched === cards.length) endGame();
+      } else {
+        setTimeout(() => {
+          card1.classList.remove('flipped');
+          card2.classList.remove('flipped');
+          card1.textContent = '';
+          card2.textContent = '';
+          flipped = [];
+        }, 800);
+      }
+    }
+
+    function startCountdown() {
+      countdownInterval = setInterval(() => {
+        countdown--;
+        countdownDisplay.textContent = countdown;
+        if (countdown <= 0) {
+          clearInterval(countdownInterval);
+          endGame();
+        }
+      }, 1000);
+    }
+
+    function endGame() {
+      clearInterval(countdownInterval);
+      btnRoleta.style.display = 'block';
+      // opcional: desabilitar cartas após término
+      document.querySelectorAll('.card').forEach(card => card.removeEventListener('click', flipCard));
+      btnRoleta.addEventListener('click', () => {
+        // enviar pontuação e tempo para backend
+        fetch("http://localhost:10000/api/score", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            score: matched,
+            moves: moves,
+            time: 45 - countdown
+          })
+        }).then(() => {
+          window.location.href = "./roleta.html";
+        });
+      });
+    }
+
+    createCards();
+  </script>
+</body>
+</html>
