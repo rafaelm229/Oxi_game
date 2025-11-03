@@ -20,11 +20,10 @@ TEMA OXXI PADRÃO
 }
 
 body {
-  background-color: var(--fundo-dark);
+  background-position: center;
   color: var(--texto-branco);
   font-family: 'Poppins', sans-serif;
   display: flex;
-  justify-content: center;
   align-items: center;
   min-height: 100vh;
   text-align: center;
@@ -39,6 +38,7 @@ body {
   max-width: 900px;
   width: 100%;
   transition: var(--transition);
+  margin-top: 50px; /* desloca o container 15px para baixo */
 }
 
 h1 {
@@ -186,6 +186,43 @@ PÁGINA DE SLOTS - ATUALIZADO
 /* Classe aplicada quando o ícone final é definido */
 .slot.landed {
   animation: land-animation 0.3s ease-out;
+}
+
+/* ---------------------------
+PÁGINA DE RESUMO - FUNDO ESPECÍFICO
+--------------------------- */
+
+/* Aplica o background específico quando <body class="resumo"> estiver presente */
+body.resumo {
+  background-image: url('../assets/background/bg-resumo.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  /* garante legibilidade geral da página */
+  color: var(--texto-branco);
+}
+
+/* Caixa de conteúdo com fundo semitransparente para legibilidade sobre o background */
+.resumo .container {
+  background: rgb(15 15 15 / 88%);
+  max-width: 600px;
+  margin: 0 auto;              /* centraliza horizontalmente (vertical controlado pelo flex do body) */
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.28);
+  color: var(--fundo-dark);
+  transform: translateY(35px); /* desloca 35px abaixo do centro da tela */
+  transition: var(--transition);
+}
+
+/* Ajustes responsivos específicos para a página de resumo */
+@media (max-width: 600px) {
+  .resumo .container {
+    margin: 4vh 1rem;
+    padding: 1rem;
+  }
 }
 
 /* ---------------------------

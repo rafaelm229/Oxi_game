@@ -7,8 +7,11 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background-color: #070906;
-      color: #c5c6c5;
+      background-image: url('/front/assets/background/bg_jogo.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -34,25 +37,35 @@
       box-shadow: 0 0 15px rgba(167, 251, 0, 0.3);
     }
 
-    .card {
-      width: 150px;
-      height: 150px;
-      background-color: #070906;
-      border: 2px solid #a7fb00;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2em;
-      color: #070906;
-      cursor: pointer;
-      transition: transform 0.3s, background-color 0.3s;
-    }
+      .card {
+        width: 150px;
+        height: 150px;
+        background-color: #070906;
+        border: 2px solid #a7fb00;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.3s, background-color 0.3s;
+        overflow: hidden;
+      }
+
+      .card img {
+        width: 80%;
+        height: 80%;
+        object-fit: contain;
+        display: none;
+        pointer-events: none;
+      }
 
     .card.flipped, .card.matched {
       background-color: #a7fb00;
-      color: #070906;
       transform: scale(1.05);
+    }
+
+    .card.flipped img, .card.matched img {
+      display: block;
     }
 
     #scoreboard {
@@ -60,18 +73,6 @@
       color: #FFFFFF;
       font-size: 1rem;
       text-align: center;
-    }
-
-    #btn-roleta {
-      margin-top: 20px;
-      padding: 12px 24px;
-      font-size: 1rem;
-      background-color: #a7fb00;
-      color: #070906;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      display: none;
     }
 
     @media (max-width: 500px) {
@@ -91,10 +92,28 @@
     Tempo Restante: <span id="countdown">45</span>s | Tentativas: <span id="moves">0</span>
   </div>
   <div class="game-container" id="game"></div>
-  <button id="btn-roleta">Girar a Roleta 🎁</button>
+ 
 
   <script>
-    const cardsData = ['📧','📊','💡','💻','📱','🚀','📈','🎯'];
+    // Image files found in front/assets/imagens_bichos
+    const imageFiles = [
+      'Ativo 1.png',
+      'Ativo 2.png',
+      'Ativo 3.png',
+      'Ativo 4.png',
+      'Ativo 5.png',
+      'Ativo 6.png',
+      'Ativo 7.png',
+      'Ativo 8.png'
+    ];
+
+    // Build full paths and ensure we have at least 8 distinct images by repeating if needed
+    const basePath = '/front/assets/imagens_bichos/';
+    let cardsData = imageFiles.map(f => basePath + f);
+    while (cardsData.length < 8) {
+      cardsData = cardsData.concat(cardsData.slice(0, 8 - cardsData.length));
+    }
+    cardsData = cardsData.slice(0, 8);
     let cards = [...cardsData, ...cardsData];
     let flipped = [];
     let matched = 0;
@@ -104,7 +123,6 @@
     const gameContainer = document.getElementById('game');
     const movesDisplay = document.getElementById('moves');
     const countdownDisplay = document.getElementById('countdown');
-    const btnRoleta = document.getElementById('btn-roleta');
 
     function shuffle(array) {
       return array.sort(() => Math.random() - 0.5);
@@ -115,16 +133,24 @@
         const card = document.createElement('div');
         card.classList.add('card');
         card.dataset.icon = icon;
+
+        // image element inside card
+        const img = document.createElement('img');
+        img.src = icon;
+        img.alt = 'animal';
+        card.appendChild(img);
+
         card.addEventListener('click', flipCard);
         gameContainer.appendChild(card);
       });
-      startCountdown();
+
+      // Show a brief preview of all images for 2 seconds before starting
+      previewAllImages();
     }
 
     function flipCard() {
       if (flipped.length === 2 || this.classList.contains('flipped') || this.classList.contains('matched')) return;
       this.classList.add('flipped');
-      this.textContent = this.dataset.icon;
       flipped.push(this);
       if (flipped.length === 2) {
         moves++;
@@ -145,11 +171,22 @@
         setTimeout(() => {
           card1.classList.remove('flipped');
           card2.classList.remove('flipped');
-          card1.textContent = '';
-          card2.textContent = '';
           flipped = [];
         }, 800);
       }
+    }
+
+    function previewAllImages() {
+      // disable interaction during preview
+      gameContainer.style.pointerEvents = 'none';
+      const allCards = Array.from(document.querySelectorAll('.card'));
+      allCards.forEach(c => c.classList.add('flipped'));
+
+      setTimeout(() => {
+        allCards.forEach(c => c.classList.remove('flipped'));
+        gameContainer.style.pointerEvents = 'auto';
+        startCountdown();
+      }, 3000);
     }
 
     function startCountdown() {
@@ -165,23 +202,56 @@
 
     function endGame() {
       clearInterval(countdownInterval);
-      btnRoleta.style.display = 'block';
-      // opcional: desabilitar cartas após término
-      document.querySelectorAll('.card').forEach(card => card.removeEventListener('click', flipCard));
-      btnRoleta.addEventListener('click', () => {
-        // enviar pontuação e tempo para backend
-        fetch("http://localhost:10000/api/score", {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({
-            score: matched,
-            moves: moves,
-            time: 45 - countdown
-          })
-        }).then(() => {
-          window.location.href = "./roleta.html";
-        });
-      });
+      // desabilitar cartas após término
+      document.querySelectorAll('.card').forEach(card => 
+        card.removeEventListener('click', flipCard)
+      );
+      finishGame();
+    }
+
+    // Chama esta função quando o timer do jogo chegar a zero
+    function finishGame() {
+      // tenta usar variáveis já existentes
+      let pontosCalc = null;
+
+      if (typeof pontos !== 'undefined' && pontos !== null) {
+        pontosCalc = Number(pontos);
+      } else if (typeof score !== 'undefined' && score !== null) {
+        pontosCalc = Number(score);
+      } else if (typeof matchedPairs !== 'undefined' && matchedPairs !== null) {
+        // exemplo caso exista contador de pares
+        pontosCalc = Number(matchedPairs) * 10;
+      } else {
+        // fallback: conta elementos DOM marcados como combinados (.card.matched)
+        const matchedCards = document.querySelectorAll('.card.matched').length;
+        const pares = Math.floor(matchedCards / 2);
+        pontosCalc = pares * 10;
+      }
+
+      // Garantir número inteiro >= 0
+      pontosCalc = Number.isFinite(pontosCalc) ? Math.max(0, Math.floor(pontosCalc)) : 0;
+
+      // Salva a pontuação no localStorage para a página resumo ler
+      localStorage.setItem('pontuacao', String(pontosCalc));
+
+      // Bloqueia interações (opcional)
+      document.body.style.pointerEvents = 'none';
+
+      // Redireciona para a página de resumo após curto delay (pode ajustar)
+      setTimeout(() => {
+        window.location.href = 'resumo.html';
+      }, 300); // 300ms para permitir possíveis animações; quem chama pode usar 0ms
+    }
+
+    // Exemplo: substituir a chamada atual do timer por finishGame()
+    // se você tiver algo como: if (timeLeft <= 0) { /* ... */ }
+    // troque por:
+    // if (timeLeft <= 0) { finishGame(); }
+
+    // Se existir um botão "finalizar" ou "ver resumo", liga o clique
+    const btnResumo = document.getElementById('btn-resumo'); // id opcional no HTML
+    if (btnResumo) {
+      btnResumo.addEventListener('click', finishGame);
     }
 
     createCards();

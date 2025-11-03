@@ -11,6 +11,7 @@
             --fundo-dark: #070906;
             --container: #131412;
             --texto-branco: #FFFFFF;
+            --texto-preto: #000000;
             --texto-cinza: #C5C6C5;
             --fundo-form: #5c1f1f;
             --campo-input: #e1b86a;
@@ -31,19 +32,19 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            background-image: url('../bg_form3.png');
+            background-image: url('assets/background/Bequigraudi\ do\ jogo\ da\ memória\ pro\ rafael\ nunes\ cavazaque\ moura.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
         }
 
         form {
-            background-color: var(--fundo-form);
+            background-color: var(--verde-oxxi);
             padding: 1.5rem;
         }
 
         .container {
-            background-color:  var(--fundo-form);
+            background-color:  var(--verde-oxxi);
             padding: 2rem;
             border-radius: 16px;
             box-shadow: 0 0 20px rgba(167, 251, 0, 0.25);
@@ -54,19 +55,19 @@
         }
 
         h1 {
-            color: var(--verde-f5f2e8);
+            color: var(--texto-preto);
             font-size: 1.8rem;
             margin-bottom: 0.5rem;
         }
 
         p.subtitulo {
-            color: var(--texto-f5f2e8);
+            color: var(--texto-preto);
             font-size: 0.95rem;
             margin-bottom: 1.5rem;
         }
 
         label {
-            color: var(--texto-cinza);
+            color: var(--texto-preto);
             display: block;
             text-align: left;
             margin-top: 1rem;
@@ -78,7 +79,7 @@
             padding: 12px;
             margin-top: 6px;
             border-radius: 8px;
-            border: 1px solid var(--campo-input);
+            border: 1px solid var(--verde-oxxi);
             background-color: #0B0C0B;
             color: var(--texto-branco);
             font-size: 1rem;
@@ -88,12 +89,12 @@
 
         input:focus {
             outline: none;
-            border-color:var(--campo-input);
+            border-color:var(--verde-oxxi);
             box-shadow: 0 0 5px rgba(167, 251, 0, 0.4);
         }
 
         button {
-            background-color: var(--botao-principal);
+            background-color: var(--fundo-dark);
             color: var(--texto-form);
             border: none;
             border-radius: 8px;
@@ -107,7 +108,7 @@
         }
 
         button:hover {
-            background-color: var(--destak-do-botao);
+            background-color: var(--fundo-dark);
             transform: scale(1.03);
         }
 
@@ -144,15 +145,15 @@
 
 <body>
     <div class="container">
-        <h1>Cadastre-se para Jogar</h1>
+        <h1>Cadastre-se para jogar</h1>
         <p class="subtitulo">Preencha seus dados para participar do desafio da memória!</p>
 
         <form id="leadForm">
             <label for="nome">Nome Completo</label>
-            <input type="text" id="nome" name="nome" required>
+            <input type="text" id="nome" name="nome" placeholder="seu nome" required>
 
             <label for="email">E-mail</label>
-            <input type="email" id="email" name="email" required>
+            <input type="email" id="email" name="email" placeholder="seuemail@gmail.com"required>
 
             <label for="telefone">Telefone</label>
             <input type="tel" id="telefone" name="telefone" placeholder="(DDD) 99999-9999" required>

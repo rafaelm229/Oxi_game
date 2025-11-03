@@ -6,8 +6,11 @@
 <title>Roleta de Prêmios Oxxi</title>
 <style>
   body {
-    background-color: #070906;
-    color: #C5C6C5;
+    background-image: url('assets/background/bg_jogo.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
     font-family: 'Poppins', sans-serif;
     display: flex;
     flex-direction: column;
@@ -29,13 +32,10 @@
 </style>
 </head>
 <body>
-
-<h1>Parabéns por Participar! 🎉</h1>
 <div id="canvas-container">
   <canvas id="wheel" width="600" height="600"></canvas>
 </div>
-<button id="btn-spin">Girar a Roleta 🎁</button>
-<button id="btn-extra" style="display:none;">Rodada Extra - Marque a gente no Instagram!</button>
+<button id="btn-spin">Girar a Roleta</button>
 <div id="message"></div>
 
 <script src="https://cdn.jsdelivr.net/gh/zarocknz/javascript-winwheel/Winwheel.min.js"></script>
@@ -117,14 +117,18 @@ document.getElementById('btn-spin').addEventListener('click', ()=>{
 
 // Callback quando a roleta para
 function alertPrize(indicatedSegment){
-  document.getElementById('message').textContent = `🎉 Você ganhou: ${indicatedSegment.text}!`;
-  document.getElementById('btn-extra').style.display = 'inline-block';
+  const msgEl = document.getElementById('message');
+  msgEl.textContent = `Você ganhou: ${indicatedSegment.text}!`;
+  msgEl.style.fontSize = '36px';
+  const btnExtra = document.getElementById('btn-extra');
+  if (btnExtra) btnExtra.style.display = 'inline-block';
+
+  // aguarda 10 segundos e redireciona para index.html
+  setTimeout(() => {
+    window.location.href = 'index.html';
+  }, 10000);
 }
 
-// Rodada extra via Instagram
-document.getElementById('btn-extra').addEventListener('click', ()=>{
-  document.getElementById('message').textContent = '✨ Ótimo! Compartilhe nos stories e marque a gente no Instagram para uma rodada extra!';
-});
 </script>
 </body>
 </html>
