@@ -194,7 +194,7 @@ PÁGINA DE RESUMO - FUNDO ESPECÍFICO
 
 /* Aplica o background específico quando <body class="resumo"> estiver presente */
 body.resumo {
-  background-image: url('/front/assets/background/bg-resumo.png');
+  background-image: url('../front/assets/background/bg-resumo.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -252,7 +252,7 @@ RESPONSIVIDADE
 PÁGINA INICIAL - BACKGROUND (index.html)
 --------------------------- */
 body.escolha {
-  background-image: url('/assets/background/bg_jogo_da_memoria.png');
+  background-image: url('../assets/background/bg_jogo_da_memoria.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
