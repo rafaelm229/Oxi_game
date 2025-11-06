@@ -252,7 +252,7 @@ RESPONSIVIDADE
 PÁGINA INICIAL - BACKGROUND (index.html)
 --------------------------- */
 body.escolha {
-  background-image: url('../assets/background/bg_jogo_da_memoria.png');
+  background-image: url('/assets/background/bg_jogo_da_memoria.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
