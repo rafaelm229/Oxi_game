@@ -194,7 +194,7 @@ PÁGINA DE RESUMO - FUNDO ESPECÍFICO
 
 /* Aplica o background específico quando <body class="resumo"> estiver presente */
 body.resumo {
-  background-image: url('/assets/backgroun/00002.png');
+  background-image: url('/assets/background/bg-resumo.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
