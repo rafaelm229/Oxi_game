@@ -73,13 +73,11 @@ const basePrizes = [
   { name: 'Copo de Café OXY', weight: 1 },
   { name: 'Caderneta OXY', weight: 1 },
   { name: 'Agenda OXY', weight: 1 },
-  { name: 'Tente Novamente', weight: 1 },
   { name: 'Não Foi Dessa Vez', weight: 1 },
   { name: 'Mousepad OXY', weight: 2 },
   { name: 'Pin OXY', weight: 1 },
   { name: 'Garrafa Térmica', weight: 3 },
   { name: 'Presente Surpresa', weight: 3 },
-  { name: 'Não Foi Dessa Vez', weight: 1 },
 ];
 
 // ----------------------------
@@ -97,12 +95,12 @@ function createWheel(prizes, colors){
     'canvasId': 'wheel',
     'numSegments': prizes.length,
     'outerRadius': 300,
-    'textFontSize': 14,
+    'textFontSize': 13,
     'segments': prizes.map((p,i)=>({ 'fillStyle': colors[i%colors.length], 'text': p.name })),
     'animation': {
       'type':'spinToStop',
       'duration':7,
-      'spins':10,
+      'spins':9,
       'callbackFinished': alertPrize
     }
   });

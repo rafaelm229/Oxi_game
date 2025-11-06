@@ -194,7 +194,7 @@ PÁGINA DE RESUMO - FUNDO ESPECÍFICO
 
 /* Aplica o background específico quando <body class="resumo"> estiver presente */
 body.resumo {
-  background-image: url('/assets/background/bg-resumo.png');
+  background-image: url('/assets/backgroun/00002.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -207,7 +207,7 @@ body.resumo {
 /* Caixa de conteúdo com fundo semitransparente para legibilidade sobre o background */
 .resumo .container {
   background: rgb(15 15 15 / 88%);
-  max-width: 400px;
+  max-width: 300px;
   margin: 0 auto;              /* centraliza horizontalmente (vertical controlado pelo flex do body) */
   padding: 2rem;
   border-radius: 12px;
