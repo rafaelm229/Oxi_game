@@ -19,8 +19,7 @@ class Lead(BaseModel):
 
 # Configuração CORS
 origins = [
-    "http://127.0.0.1:5500",
-    "http://localhost:5500",
+    "https://oxygame.netlify.app/",
     "*",
 ]
 
@@ -33,7 +32,7 @@ app.add_middleware(
 )
 
 # Substitua aqui pela sua API Key do RD Station
-RD_API_KEY = ""
+RD_API_KEY = "d2364c686dcd0a66d8d286b153f425be "
 
 # Endpoint para receber lead do front-end
 @app.post("/api/lead")
