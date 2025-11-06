@@ -33,7 +33,7 @@
 </head>
 <body>
 <div id="canvas-container">
-  <canvas id="wheel" width="500" height="500"></canvas>
+  <canvas id="wheel" width="600" height="600"></canvas>
 </div>
 <button id="btn-spin">Girar a Roleta</button>
 <div id="message"></div>
@@ -51,14 +51,16 @@ const roletaColors = ['#A7FB00', '#ffff']; // Cores alternadas da roleta
 // Prêmios com pesos baseados na pontuação
 const basePrizes = [
   { name: 'Tente Novamente', weight: 1 },
-  { name: 'Copo de Café OXi', weight: 1 },
-  { name: 'Caderneta Oxi', weight: 1 },
-  { name: 'Agenda Oxy', weight: 1 },
-  { name: 'Jogue Novamente', weight: 1 },
-  { name: 'Mousepad OXi', weight: 2 },
-  { name: 'Pin Oxi', weight: 1 },
+  { name: 'Copo de Café OXY', weight: 1 },
+  { name: 'Caderneta OXY', weight: 1 },
+  { name: 'Agenda OXY', weight: 1 },
+  { name: 'Tente Novamente', weight: 1 },
+  { name: 'Não Foi Dessa Vez', weight: 1 },
+  { name: 'Mousepad OXY', weight: 2 },
+  { name: 'Pin OXY', weight: 1 },
   { name: 'Garrafa Térmica', weight: 3 },
-  { name: 'Presente Surpresa', weight: 3 }
+  { name: 'Presente Surpresa', weight: 3 },
+  { name: 'Não Foi Dessa Vez', weight: 1 },
 ];
 
 // ----------------------------
@@ -80,8 +82,8 @@ function createWheel(prizes, colors){
     'segments': prizes.map((p,i)=>({ 'fillStyle': colors[i%colors.length], 'text': p.name })),
     'animation': {
       'type':'spinToStop',
-      'duration':5,
-      'spins':8,
+      'duration':7,
+      'spins':10,
       'callbackFinished': alertPrize
     }
   });
@@ -117,7 +119,7 @@ document.getElementById('btn-spin').addEventListener('click', ()=>{
 // Callback quando a roleta para
 function alertPrize(indicatedSegment){
   const msgEl = document.getElementById('message');
-  msgEl.textContent = `Você ganhou: ${indicatedSegment.text}!`;
+  msgEl.textContent = `${indicatedSegment.text}!`;
   msgEl.style.fontSize = '36px';
   const btnExtra = document.getElementById('btn-extra');
   if (btnExtra) btnExtra.style.display = 'inline-block';
