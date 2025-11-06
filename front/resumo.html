@@ -5,33 +5,56 @@
   <meta charset="UTF-8">
   <title>Resumo do Jogo | Oxxi Games</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .container {
+      text-align: center;
+      padding: 2rem;
+    }
+    .pontuacao {
+      font-size: 4rem;
+      font-weight: bold;
+      margin: 2rem 0;
+    }
+    .emoji {
+      position: fixed;
+      font-size: 2rem;
+      animation: floatUp 3s linear forwards;
+    }
+    @keyframes floatUp {
+      from {
+        transform: translateY(100vh);
+      }
+      to {
+        transform: translateY(-100px);
+      }
+    }
+  </style>
 </head>
 <body class="resumo">
   <div class="container">
-    <p>Sua pontuação: <span id="pontos">0</span></p>
-    <div id="ranking">
-      <h2>Ranking Atual</h2>
-      <ol id="lista-ranking"></ol>
-    </div>
-    <button onclick="window.location.href='roleta.html'">Garantir Meu Prêmio</button>
+    <h1>🎉 Parabéns! 🎉</h1>
+    <p>Sua pontuação:</p>
+    <div class="pontuacao"><span id="pontos">0</span></div>
+    <button onclick="window.location.href='roleta.html'">Ir para a Roleta de Prêmios</button>
   </div>
 
   <script>
-    // Exemplo de carregamento de pontuação do localStorage
+    const ANIMATION_DURATION = 10000; // Duração da animação em ms
+    const emojis = ['🎉', '🎊', '🌟', '✨', '🏆'];
     const pontos = localStorage.getItem('pontuacao') || 0;
     document.getElementById('pontos').textContent = pontos;
 
-    // Mock de ranking (posteriormente integrado ao backend)
-    const ranking = [
-      { nome: "Ana", pontos: 120 },
-      { nome: "Carlos", pontos: 90 },
-      { nome: "Você", pontos: pontos }
-    ];
-    ranking.forEach(r => {
-      const li = document.createElement('li');
-      li.textContent = `${r.nome} — ${r.pontos} pts`;
-      document.getElementById('lista-ranking').appendChild(li);
-    });
+    function createEmoji() {
+      const emoji = document.createElement('div');
+      emoji.className = 'emoji';
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = Math.random() * 100 + 'vw';
+      document.body.appendChild(emoji);
+      setTimeout(() => emoji.remove(), 3000);
+    }
+
+    const interval = setInterval(createEmoji, 300);
+    setTimeout(() => clearInterval(interval), ANIMATION_DURATION);
   </script>
 </body>
 </html>

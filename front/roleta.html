@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Roleta de Prêmios Oxxi</title>
+<title>Roleta de Prêmios OXY</title>
 <style>
   body {
     background-image: url('assets/background/bg_jogo.png');
@@ -35,7 +35,26 @@
 <div id="canvas-container">
   <canvas id="wheel" width="600" height="600"></canvas>
 </div>
-<button id="btn-spin">Girar a Roleta</button>
+<button id="btn-spin" style="
+  background-color: #ff0000;
+  color: white;
+  font-size: 24px;
+  padding: 15px 40px;
+  border-radius: 50px;
+  border: 3px solid #white;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+  text-transform: uppercase;
+  font-weight: bold;
+  animation: pulse 1.5s infinite;
+">APERTE</button>
+
+<style>
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+</style>
 <div id="message"></div>
 
 <script src="https://cdn.jsdelivr.net/gh/zarocknz/javascript-winwheel/Winwheel.min.js"></script>
