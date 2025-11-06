@@ -108,7 +108,7 @@
     ];
 
     // Build full paths and ensure we have at least 8 distinct images by repeating if needed
-    const basePath = '/front/assets/imagens_bichos/';
+    const basePath = '/assets/imagens_bichos/';
     let cardsData = imageFiles.map(f => basePath + f);
     while (cardsData.length < 8) {
       cardsData = cardsData.concat(cardsData.slice(0, 8 - cardsData.length));
