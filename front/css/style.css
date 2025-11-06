@@ -252,7 +252,7 @@ RESPONSIVIDADE
 PÁGINA INICIAL - BACKGROUND (index.html)
 --------------------------- */
 body.escolha {
-  background-image: url('assets/background/bg_home_horizontal.png');
+  background-image: url('/assets/background/bg_home_horizontal.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
